@@ -1,0 +1,28 @@
+{
+	"FLIPSIDE": {
+		"TERRA": {
+			"NETWORK_METRICS": {
+				"DAILY": "https://api.flipsidecrypto.com/api/v2/queries/bfba12dc-34bc-42e9-bf35-8ad28ebaee32/data/latest",
+				"WEEKLY": "https://api.flipsidecrypto.com/api/v2/queries/87143659-8714-4f81-8929-e77c1a391908/data/latest",
+				"MONTHLY": "https://api.flipsidecrypto.com/api/v2/queries/5e9637ed-d8dc-4f56-a4c2-8ef67c6bd4a0/data/latest"
+			},
+			"BRIDGE_METRICS": {
+				"DAILY": "https://api.flipsidecrypto.com/api/v2/queries/b665f696-397b-4ac1-b96d-c580d2d9ef60/data/latest",
+				"WEEKLY": "https://api.flipsidecrypto.com/api/v2/queries/8a23d1cb-b356-4af2-b52e-641aebc3ee4a/data/latest",
+				"IBC": {
+					"DAILY": "https://api.flipsidecrypto.com/api/v2/queries/c89702f5-d6ce-4954-9504-32b70bc73bf2/data/latest"
+				}
+			},
+			"VOTE_METRICS": {
+				"NO_LABEL": "https://api.flipsidecrypto.com/api/v2/queries/33786540-aff3-4f28-b8e4-fff3c0054369/data/latest",
+				"LABEL": "https://api.flipsidecrypto.com/api/v2/queries/2ac24224-b936-4bcc-a1a7-20bfa1bda3be/data/latest"
+			},
+			"PROTOCOLS": {
+				"MARS": {
+					"METRICS": "https://api.flipsidecrypto.com/api/v2/queries/6550464c-f966-40cd-8d06-631151d94efa/data/latest",
+					"FLOWS": "https://api.flipsidecrypto.com/api/v2/queries/2c32c93b-b8a3-4699-836f-09b820b83710/data/latest"
+				}
+			}
+		}
+	}
+}

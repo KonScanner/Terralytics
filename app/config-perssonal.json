@@ -1,0 +1,28 @@
+{
+	"FLIPSIDE": {
+		"TERRA": {
+			"NETWORK_METRICS": {
+				"DAILY": "https://personal-data-api.herokuapp.com/api/terra/network_metrics/daily",
+				"WEEKLY": "https://personal-data-api.herokuapp.com/api/terra/network_metrics/weekly",
+				"MONTHLY": "https://personal-data-api.herokuapp.com/api/terra/network_metrics/monthly"
+			},
+			"BRIDGE_METRICS": {
+				"DAILY": "https://personal-data-api.herokuapp.com/api/terra/bridge_metrics/non_ibc/daily",
+				"WEEKLY": "https://personal-data-api.herokuapp.com/api/terra/bridge_metrics/non_ibc/weekly",
+				"IBC": {
+					"DAILY": "https://personal-data-api.herokuapp.com/api/terra/bridge_metrics/ibc/daily"
+				}
+			},
+			"VOTE_METRICS": {
+				"NO_LABEL": "https://personal-data-api.herokuapp.com/api/terra/vote_metrics/no_label",
+				"LABEL": "https://personal-data-api.herokuapp.com/api/terra/vote_metrics/label"
+			},
+			"PROTOCOLS": {
+				"MARS": {
+					"METRICS": "https://personal-data-api.herokuapp.com/api/terra/protocols/mars/metrics",
+					"FLOWS": "https://personal-data-api.herokuapp.com/api/terra/protocols/mars/flows"
+				}
+			}
+		}
+	}
+}

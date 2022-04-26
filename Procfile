@@ -1,0 +1,1 @@
+web: sh scripts/setup.sh && streamlit run --server.port $PORT app/main.py
