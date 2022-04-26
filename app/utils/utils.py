@@ -8,8 +8,7 @@ def request_data(url: str):
     response = rq.get(url, headers={"Accept": "application/json"})
     if response.status_code == 200:
         return pd.DataFrame(response.json())
-    else:
-        return pd.DataFrame([])
+    return pd.DataFrame([])
 
 
 def read_config(fname: str = "config.json") -> dict:
