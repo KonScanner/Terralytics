@@ -13,33 +13,52 @@ option = "daily"
 option = st.selectbox("View:", ("daily", "weekly", "monhtly"), index=1)
 
 
-network_metrics = terra_network_metrics(trunc_date=option)
-tx_count = network_metrics[["DATE", "TXN_COUNT"]].rename(
-    columns={"DATE": "Date", "TXN_COUNT": "Terra Transaction Count"}
-)
-uq_addresses = network_metrics[["DATE", "ACTIVE_UNIQUE_ADDRESSES"]].rename(
-    columns={"DATE": "Date", "ACTIVE_UNIQUE_ADDRESSES": "Terra Unique Addresses"}
-)
-avg_txn = network_metrics[["DATE", "AVG_TXN_PER_ADDRESS"]].rename(
-    columns={
-        "DATE": "Date",
-        "AVG_TXN_PER_ADDRESS": "Terra Average Transactions per Unique Address",
-    }
-)
-bridge_metrics_non_ibc = terra_bridge_metrics(trunc_date=option)
-bridge_metrics_non_ibc.rename(
-    columns={
-        "DATE": "Date",
-        "TOTAL_AMOUNT_USD": "Total Amount USD",
-        "AMOUNT_LUNA": "Amount LUNA",
-        "AMOUNT_UST": "Amount UST",
-        "DENOM": "Denomination",
-        "LABEL": "Bridge Label",
-    },
-    inplace=True,
-)
-bridge_metrics_ibc = terra_bridge_metrics2()
+@st.cache(suppress_st_warning=True)
+def load_data():
+    network_metrics = terra_network_metrics(trunc_date=option)
+    tx_count = network_metrics[["DATE", "TXN_COUNT"]].rename(
+        columns={"DATE": "Date", "TXN_COUNT": "Terra Transaction Count"}
+    )
+    uq_addresses = network_metrics[["DATE", "ACTIVE_UNIQUE_ADDRESSES"]].rename(
+        columns={"DATE": "Date", "ACTIVE_UNIQUE_ADDRESSES": "Terra Unique Addresses"}
+    )
+    avg_txn = network_metrics[["DATE", "AVG_TXN_PER_ADDRESS"]].rename(
+        columns={
+            "DATE": "Date",
+            "AVG_TXN_PER_ADDRESS": "Terra Average Transactions per Unique Address",
+        }
+    )
+    bridge_metrics_non_ibc = terra_bridge_metrics(trunc_date=option)
+    bridge_metrics_non_ibc.rename(
+        columns={
+            "DATE": "Date",
+            "TOTAL_AMOUNT_USD": "Total Amount USD",
+            "AMOUNT_LUNA": "Amount LUNA",
+            "AMOUNT_UST": "Amount UST",
+            "DENOM": "Denomination",
+            "LABEL": "Bridge Label",
+        },
+        inplace=True,
+    )
+    bridge_metrics_ibc = terra_bridge_metrics2()
+    return (
+        network_metrics,
+        tx_count,
+        uq_addresses,
+        avg_txn,
+        bridge_metrics_non_ibc,
+        bridge_metrics_ibc,
+    )
 
+
+(
+    network_metrics,
+    tx_count,
+    uq_addresses,
+    avg_txn,
+    bridge_metrics_non_ibc,
+    bridge_metrics_ibc,
+) = load_data()
 st.markdown("## Network Metrics")
 fig_cols = st.columns(3)
 with fig_cols[0]:
