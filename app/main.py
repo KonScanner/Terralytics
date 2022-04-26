@@ -10,7 +10,7 @@ st.set_page_config(page_title="Terra Metrics Dashboard", page_icon="📈", layou
 color = "#172852"
 st.markdown("# [Terralytics](.)", unsafe_allow_html=True)
 option = "daily"
-option = st.selectbox("View:", ("daily", "weekly", "monhtly"), index=1)
+option = st.selectbox("View:", ("daily", "weekly", "monthly"), index=1)
 
 
 @st.cache(suppress_st_warning=True)
