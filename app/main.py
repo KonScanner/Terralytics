@@ -60,18 +60,20 @@ def load_data():
     bridge_metrics_ibc,
 ) = load_data()
 st.markdown("## Network Metrics")
-fig_cols = st.columns(3)
+fig = px.line(
+    tx_count,
+    x="Date",
+    y="Terra Transaction Count",
+    title=f"Terra Transaction count | {option.capitalize()}",
+)
+fig.update_traces(line_color=color)
+fig.update_layout(
+    autosize=True,
+    width=1600,
+)
+st.write(fig)
+fig_cols = st.columns(2)
 with fig_cols[0]:
-    # st.markdown("### First Chart Title")
-    fig = px.line(
-        tx_count,
-        x="Date",
-        y="Terra Transaction Count",
-        title=f"Terra Transaction count | {option.capitalize()}",
-    )
-    fig.update_traces(line_color=color)
-    st.write(fig)
-with fig_cols[1]:
     # st.markdown("### Second Chart Title")
     fig2 = px.line(
         uq_addresses,
@@ -80,8 +82,12 @@ with fig_cols[1]:
         title=f"Terra Unique Addresses | {option.capitalize()}",
     )
     fig2.update_traces(line_color=color)
+    fig2.update_layout(
+        autosize=True,
+        width=800,
+    )
     st.write(fig2)
-with fig_cols[2]:
+with fig_cols[1]:
     # st.markdown("### Third Chart Title")
     fig3 = px.line(
         avg_txn,
@@ -90,6 +96,10 @@ with fig_cols[2]:
         title=f"Terra Average Transactions per Unique Address | {option.capitalize()}",
     )
     fig3.update_traces(line_color=color)
+    fig3.update_layout(
+        autosize=True,
+        width=800,
+    )
     st.write(fig3)
 
 st.markdown("## Bridge Metrics")
@@ -104,6 +114,10 @@ with fig_cols2[0]:
         title=f"Bridging OUT | LUNA Amount | Per bridge | {opt.capitalize()}",
     )
     fig4.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig4.update_layout(
+        autosize=True,
+        width=800,
+    )
     st.write(fig4)
 
 with fig_cols2[1]:
@@ -116,6 +130,10 @@ with fig_cols2[1]:
         title=f"Bridging OUT | UST Amount | Per bridge | {opt.capitalize()}",
     )
     fig5.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig5.update_layout(
+        autosize=True,
+        width=800,
+    )
     st.write(fig5)
 
 fig_cols3 = st.columns(2)
@@ -129,6 +147,10 @@ with fig_cols3[0]:
         title=f"Bridging OUT | USD amount | Per bridge | {opt.capitalize()}",
     )
     fig6.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig6.update_layout(
+        autosize=True,
+        width=800,
+    )
     st.write(fig6)
 
 with fig_cols3[1]:
@@ -141,6 +163,10 @@ with fig_cols3[1]:
         title=f"Bridging OUT | USD amount | Per coin | {opt.capitalize()}",
     )
     fig7.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+    fig7.update_layout(
+        autosize=True,
+        width=800,
+    )
     st.write(fig7)
 # st.title("### Data Table")
 # st.dataframe(df)

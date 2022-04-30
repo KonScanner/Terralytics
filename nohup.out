@@ -1,0 +1,40 @@
+sh scripts/docker_start.sh
+Sending build context to Docker daemon  208.9kB
+Step 1/11 : FROM python:3.10.4-slim
+3.10.4-slim: Pulling from library/python
+Digest: sha256:ad719a882ac0594bdc92abccff22e5b6713bbf9893320264fd9e8affd8a6f470
+Status: Image is up to date for python:3.10.4-slim
+ ---> c3e38abaf684
+Step 2/11 : LABEL maintainer="Konstantinos K @KonScanner"
+ ---> Using cache
+ ---> 3fb8f7034e02
+Step 3/11 : EXPOSE 8501:80
+ ---> Using cache
+ ---> 98d3f9010f8d
+Step 4/11 : WORKDIR /app
+ ---> Using cache
+ ---> 51421eda2c32
+Step 5/11 : COPY requirements.txt .
+ ---> Using cache
+ ---> cef75d8161ff
+Step 6/11 : COPY scripts/setup.sh .
+ ---> Using cache
+ ---> d24451828823
+Step 7/11 : COPY config.json .
+ ---> Using cache
+ ---> ef12d061ce22
+Step 8/11 : RUN pip install --upgrade pip
+ ---> Using cache
+ ---> cd001879e3d7
+Step 9/11 : RUN pip install -r requirements.txt
+ ---> Using cache
+ ---> 8258c2e22caf
+Step 10/11 : COPY ./app /app
+ ---> 5236b4e69c1e
+Step 11/11 : CMD sh setup.sh && streamlit run main.py
+ ---> Running in 9b4a2f0af60f
+Removing intermediate container 9b4a2f0af60f
+ ---> 4dacaaf56223
+Successfully built 4dacaaf56223
+Successfully tagged terralytics:latest
+a2db836b83319972f7ac62a9148084de875f944bd05af8f5fcf4f53cfa966d57
