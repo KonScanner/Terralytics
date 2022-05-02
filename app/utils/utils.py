@@ -4,10 +4,19 @@ import pandas as pd
 import json
 
 
-def request_data(url: str):
-    response = rq.get(url, headers={"Accept": "application/json"})
+def request_data(url: str, return_df=True):
+    response = rq.get(
+        url,
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+        },
+    )
     if response.status_code == 200:
-        return pd.DataFrame(response.json())
+        if return_df:
+            return pd.DataFrame(response.json())
+        else:
+            return response.json()
     return pd.DataFrame([])
 
 
@@ -63,4 +72,29 @@ def terra_bridge_metrics2():
         return None
     df["DATE"] = pd.to_datetime(df["DATE"])
     df = df[:-1]
+    return df
+
+
+def terra_ust_metrics(vs_currency: str = "usd"):
+    url = f"https://www.coingecko.com/market_cap/coins_market_cap_chart_data?coin_ids=325%2C6319%2C12681%2C9576%2C9956%2C16786%2C13422&locale=en&vs_currency={vs_currency}"
+    results = request_data(url=url, return_df=False)
+    dfs = []
+    for result in results:
+        name = result["name"]
+        data = result["data"]
+        df = pd.DataFrame(data)
+        df.rename(
+            {0: "date", 1: f"market_cap_{name.lower().replace(' ','_')}"},
+            axis=1,
+            inplace=True,
+        )
+        df["date"] = pd.to_datetime(df["date"], unit="ms")
+        dfs.append(df)
+    expr = ""
+    for i in range(len(dfs) - 2):
+        if i == 0:
+            expr += f'dfs[{i}].merge(dfs[{i+1}], on="date", how="inner").'
+        if i < 7:
+            expr += f'merge(dfs[{i+2}], on="date", how="inner").'
+    df = eval(expr[:-1])
     return df

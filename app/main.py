@@ -3,6 +3,7 @@ from utils.utils import (
     terra_network_metrics,
     terra_bridge_metrics,
     terra_bridge_metrics2,
+    terra_ust_metrics,
 )
 import plotly.express as px
 
@@ -41,6 +42,7 @@ def load_data():
         inplace=True,
     )
     bridge_metrics_ibc = terra_bridge_metrics2()
+    ust_metrics = terra_ust_metrics()
     return (
         network_metrics,
         tx_count,
@@ -48,6 +50,7 @@ def load_data():
         avg_txn,
         bridge_metrics_non_ibc,
         bridge_metrics_ibc,
+        ust_metrics,
     )
 
 
@@ -58,6 +61,7 @@ def load_data():
     avg_txn,
     bridge_metrics_non_ibc,
     bridge_metrics_ibc,
+    ust_metrics,
 ) = load_data()
 st.markdown("## Network Metrics")
 fig = px.line(
@@ -153,6 +157,7 @@ with fig_cols3[0]:
     )
     st.write(fig6)
 
+
 with fig_cols3[1]:
     opt = "weekly" if option == "monthly" else option
     fig7 = px.bar(
@@ -168,5 +173,40 @@ with fig_cols3[1]:
         width=800,
     )
     st.write(fig7)
+
+st.markdown("## Market Caps")
+fig_cols4 = st.columns(2)
+with fig_cols4[0]:
+    # st.markdown("### Second Chart Title")
+    fig8 = px.line(
+        ust_metrics.rename(
+            {"date": "Date", "market_cap_terrausd": "Market Cap UST"}, axis=1
+        ),
+        x="Date",
+        y="Market Cap UST",
+        title="Market Cap | UST",
+    )
+    fig8.update_traces(line_color=color)
+    fig8.update_layout(
+        autosize=True,
+        width=800,
+    )
+    st.write(fig8)
+with fig_cols4[1]:
+    # st.markdown("### Third Chart Title")
+    fig9 = px.line(
+        ust_metrics.rename(
+            {"date": "Date", "market_cap_binance_usd": "Market Cap BUSD"}, axis=1
+        ),
+        x="Date",
+        y="Market Cap BUSD",
+        title="Market Cap | BUSD",
+    )
+    fig9.update_traces(line_color=color)
+    fig9.update_layout(
+        autosize=True,
+        width=800,
+    )
+    st.write(fig9)
 # st.title("### Data Table")
 # st.dataframe(df)
