@@ -13,10 +13,7 @@ def request_data(url: str, return_df=True):
         },
     )
     if response.status_code == 200:
-        if return_df:
-            return pd.DataFrame(response.json())
-        else:
-            return response.json()
+        return pd.DataFrame(response.json()) if return_df else response.json()
     return pd.DataFrame([])
 
 
@@ -52,8 +49,6 @@ def terra_bridge_metrics(trunc_date="daily") -> pd.DataFrame:
     urls = read_config()
     if trunc_date == "daily":
         url = urls["FLIPSIDE"]["TERRA"]["BRIDGE_METRICS"]["DAILY"]
-    elif trunc_date == "weekly":
-        url = urls["FLIPSIDE"]["TERRA"]["BRIDGE_METRICS"]["WEEKLY"]
     else:
         url = urls["FLIPSIDE"]["TERRA"]["BRIDGE_METRICS"]["WEEKLY"]
     df = request_data(url=url)
