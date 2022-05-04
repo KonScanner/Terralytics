@@ -4,6 +4,7 @@ from utils.utils import (
     terra_bridge_metrics,
     terra_bridge_metrics2,
     terra_ust_metrics,
+    anchor_stats,
 )
 import plotly.express as px
 
@@ -43,6 +44,7 @@ def load_data():
     )
     bridge_metrics_ibc = terra_bridge_metrics2()
     ust_metrics = terra_ust_metrics()
+    anchor_statistics = anchor_stats(trunc_date=option)
     return (
         network_metrics,
         tx_count,
@@ -51,6 +53,7 @@ def load_data():
         bridge_metrics_non_ibc,
         bridge_metrics_ibc,
         ust_metrics,
+        anchor_statistics,
     )
 
 
@@ -62,6 +65,7 @@ def load_data():
     bridge_metrics_non_ibc,
     bridge_metrics_ibc,
     ust_metrics,
+    anchor_statistics,
 ) = load_data()
 st.markdown("## Network Metrics")
 fig = px.line(
@@ -208,5 +212,37 @@ with fig_cols4[1]:
         width=800,
     )
     st.write(fig9)
+
+st.markdown("## Anchor Stats")
+fig_cols5 = st.columns(2)
+with fig_cols5[0]:
+    # st.markdown("### Second Chart Title")
+    fig10 = px.line(
+        anchor_statistics[0].rename({"DATE": "Date"}, axis=1),
+        x="Date",
+        y="Estimated Deposited UST on Anchor",
+        title=f"Estimated Deposited UST on Anchor | {option.capitalize()}",
+    )
+    fig10.update_traces(line_color=color)
+    fig10.update_layout(
+        autosize=True,
+        width=800,
+    )
+    st.write(fig10)
+with fig_cols5[1]:
+    # st.markdown("### Third Chart Title")
+    fig11 = px.line(
+        anchor_statistics[1].rename({"DATE": "Date"}, axis=1),
+        x="Date",
+        y="Estimated Borrowed UST on Anchor",
+        title=f"Estimated Borrowed UST on Anchor | {option.capitalize()}",
+    )
+    fig11.update_traces(line_color=color)
+    fig11.update_layout(
+        autosize=True,
+        width=800,
+    )
+    st.write(fig11)
+
 # st.title("### Data Table")
 # st.dataframe(df)

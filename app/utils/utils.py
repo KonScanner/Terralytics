@@ -13,10 +13,7 @@ def request_data(url: str, return_df=True):
         },
     )
     if response.status_code == 200:
-        if return_df:
-            return pd.DataFrame(response.json())
-        else:
-            return response.json()
+        return pd.DataFrame(response.json()) if return_df else response.json()
     return pd.DataFrame([])
 
 
@@ -52,8 +49,6 @@ def terra_bridge_metrics(trunc_date="daily") -> pd.DataFrame:
     urls = read_config()
     if trunc_date == "daily":
         url = urls["FLIPSIDE"]["TERRA"]["BRIDGE_METRICS"]["DAILY"]
-    elif trunc_date == "weekly":
-        url = urls["FLIPSIDE"]["TERRA"]["BRIDGE_METRICS"]["WEEKLY"]
     else:
         url = urls["FLIPSIDE"]["TERRA"]["BRIDGE_METRICS"]["WEEKLY"]
     df = request_data(url=url)
@@ -98,3 +93,45 @@ def terra_ust_metrics(vs_currency: str = "usd"):
             expr += f'merge(dfs[{i+2}], on="date", how="inner").'
     df = eval(expr[:-1])
     return df
+
+
+def trunc_by(data: pd.DataFrame, by: str = "W") -> pd.DataFrame:
+    return (
+        data.resample(by, label="right", closed="right", on="DATE")
+        .sum()
+        .reset_index()
+        .sort_values(by="DATE")
+    )
+
+
+def get_date_truncations(self, data: pd.DataFrame) -> dict:
+    """
+    Creates Weekly and Monthly  dict.
+
+    Args:
+        data (pd.DataFrame): Dataframe of Daily data.
+
+    Returns:
+            dict: Daily, Weekly and Monthly  dataframes.
+    """
+    weekly = trunc_by(data=data, by="W")
+    monthly = trunc_by(data=data, by="M")
+    return {"daily": data, "weekly": weekly, "monthly": monthly}
+
+
+def anchor_stats(trunc_date: str) -> pd.DataFrame:
+    urls = [
+        "https://api.flipsidecrypto.com/api/v2/queries/0340f54a-b4dc-4797-b9ce-f26ce35b2f64/data/latest",  # Deposit estimate
+        "https://api.flipsidecrypto.com/api/v2/queries/a8f67d65-7066-4fb4-8210-bb5bea10599a/data/latest",  # Borrow estimate
+    ]
+
+    deposit_daily = request_data(url=urls[0], return_df=True)
+    withdraw_daily = request_data(url=urls[1], return_df=True)
+    deposit_daily["DATE"] = pd.to_datetime(deposit_daily["DATE"])
+    withdraw_daily["DATE"] = pd.to_datetime(withdraw_daily["DATE"])
+    if trunc_date == "daily":
+        return (deposit_daily, withdraw_daily)
+    elif trunc_date == "weekly":
+        return (trunc_by(deposit_daily, by="W"), trunc_by(withdraw_daily, by="W"))
+    else:
+        return (trunc_by(deposit_daily, by="M"), trunc_by(withdraw_daily, by="M"))
